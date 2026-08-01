@@ -7,7 +7,12 @@ import {
   CardContent,
   Box,
 } from "@mui/material";
+import { useEffect } from "react";
+import { seedDatabase } from "./db/seed";
 function App() {
+  useEffect(() => {
+    seedDatabase();
+  }, []);
   return (
     <>
       <AppBar position="static">
@@ -42,3 +47,4 @@ function App() {
   );
 }
 export default App;
+
