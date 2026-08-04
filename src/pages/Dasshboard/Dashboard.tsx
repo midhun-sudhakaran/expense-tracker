@@ -12,21 +12,30 @@ import {
   Fab,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddRecurringBillDialog from "../../components/forms/AddRecurringBillDialog";
 import EditBalanceDialog from "../../components/forms/EditBalanceDialog";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
+import type { RecurringBill } from "../../models/RecurringBill";
+import RecurringBillService from "../../services/RecurringBillService";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [balance, setBalance] = useState(25000);
   const [balanceDialogOpen, setBalanceDialogOpen] = useState(false);
-//   const paidBills = recurringBills
-// .filter(x => x.paid)
-// .reduce((sum, x) => sum + x.amount, 0);
+  const [recurringBillDialogOpen, setRecurringBillDialogOpen] = useState(false);
 
-// const remaining = balance - paidBills;
+  const [recurringBills, setRecurringBills] = useState<RecurringBill[]>([]);
+
+  useEffect(() => {
+    loadBills();
+  }, []);
+
+  async function loadBills() {
+    const bills = await RecurringBillService.getAll();
+    setRecurringBills(bills);
+  }
 
   return (
     <Box>
@@ -71,12 +80,28 @@ export default function Dashboard() {
 
       <Paper sx={{ mt: 4 }}>
         <List>
-          <ListItem secondaryAction={<Checkbox />}>
-            <ListItemText primary="Internet" secondary="Due: 5" />
+          {recurringBills.map((bill) => (
+            <ListItem key={bill.id}>
+              <ListItemText
+                primary={bill.description}
+                secondary={`Due: ${bill.dueDay}`}
+              />
+              <Typography>₹{bill.amount.toLocaleString()}</Typography>
+            </ListItem>
+          ))}
+        </List>        
 
-            <Typography>₹999</Typography>
-          </ListItem>
-        </List>
+      {/* <Fab
+        color="primary"
+        sx={{
+          position: "fixed",
+          bottom: 24,
+          right: 24,
+        }}
+        onClick={() => setRecurringBillDialogOpen(true)}
+      >
+        <AddIcon />
+      </Fab> */}
       </Paper>
 
       <Fab
@@ -90,7 +115,10 @@ export default function Dashboard() {
       >
         <AddIcon />
       </Fab>
-      <AddRecurringBillDialog open={open} onClose={() => setOpen(false)} />
+      <AddRecurringBillDialog
+        open={recurringBillDialogOpen}
+        onClose={() => setRecurringBillDialogOpen(false)}
+      />
       <EditBalanceDialog
         open={balanceDialogOpen}
         value={balance}

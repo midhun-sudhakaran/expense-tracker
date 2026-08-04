@@ -1,9 +1,9 @@
 export interface RecurringBill {
-  id: string;
+  id?: number;
   description: string;
   amount: number;
   dueDay: number;
   category: string;
-  isPaid: boolean;
-  paidDate?: string;
+  isActive: boolean;
+  createdAt: Date;
 }
