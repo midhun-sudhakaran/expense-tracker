@@ -4,8 +4,7 @@ import {
   CardContent,
   Typography,
   Grid,
-  Paper,
-  Checkbox,
+  Paper,  
   List,
   ListItem,
   ListItemText,
@@ -21,7 +20,6 @@ import type { RecurringBill } from "../../models/RecurringBill";
 import RecurringBillService from "../../services/RecurringBillService";
 
 export default function Dashboard() {
-  const [open, setOpen] = useState(false);
   const [balance, setBalance] = useState(25000);
   const [balanceDialogOpen, setBalanceDialogOpen] = useState(false);
   const [recurringBillDialogOpen, setRecurringBillDialogOpen] = useState(false);
@@ -111,7 +109,7 @@ export default function Dashboard() {
           right: 20,
           bottom: 20,
         }}
-        onClick={() => setOpen(true)}
+        onClick={() => setBalanceDialogOpen(true)}
       >
         <AddIcon />
       </Fab>
